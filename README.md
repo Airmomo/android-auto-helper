@@ -1,7 +1,7 @@
 # android-auto-helper
 基于Python3开发的、开源的、跨平台的安卓自动化脚本开发工具
 # 项目应用
-- [安卓脚本应用开发脚手架]()
+- [安卓脚本应用开发脚手架](https://github.com/Airmomo/android-script-starter)
 - [安卓截图图色助手](https://github.com/Airmomo/android-pixer-helper)
 - [介绍及应用教学视频]()
 # 项目优缺点
