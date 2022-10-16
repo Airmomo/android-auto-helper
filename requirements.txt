@@ -1,0 +1,5 @@
+easyocr==1.6.2
+imutils==0.5.4
+numpy==1.23.3
+opencv_python_headless==4.5.4.60
+Pillow==9.2.0
