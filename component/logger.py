@@ -65,6 +65,9 @@ class Logger:
         self.device_name = device_name
         self.level = level
 
+    def setLevel(self, level):
+        self.level = level
+
     def debug(self, *value):
         if self.level >= LEVEL_DEBUG:
             _printOnly(self.adb_path, self.device_name, LEVEL_DEBUG_NAME, *value)
