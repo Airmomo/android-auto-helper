@@ -54,6 +54,20 @@ class FinderEx:
                          ",".join([str(item.position_x), str(item.position_y)]), "]->长按时长[", time_cost, "s]")
         return self.toucher.longTouchSingle(item.position_x, item.position_y, time_cost)
 
+    def swipe(self, table_name, table_item_name, time_cost):
+        """
+            滑动操作主函数
+            :param table_name: 表名
+            :param table_item_name: 字段名
+            :param time_cost: 滑动时长
+            :return: 点击结果
+        """
+        item = self.table[table_name][table_item_name]
+        self.logger.info("正在滑动[", table_name, "][", table_item_name, "]", "->滑动起点坐标[",
+                         ",".join([str(item.start_x), str(item.start_y)]), "]", "->滑动终点坐标[",
+                         ",".join([str(item.end_x), str(item.end_y)]), "]", "->滑动时长[", time_cost, "s]")
+        return self.toucher.swipeSingle(item.start_x, item.start_y, item.end_x, item.end_y, time_cost)
+
     def find(self, table_name, table_item_name, isReturnLoc=False):
         """
             查找操作主函数
@@ -109,79 +123,6 @@ class FinderEx:
             self.logger.info("查找成功[", table_name, "][", table_item_name, "]->坐标[", ",".join([str(x), str(y)]),
                              "]->执行操作[", "长按]->长按时长[", time_cost, "ms]")
             self.toucher.longTouchSingle(x + py_x, y + py_y, time_cost)
-            return True
-        return False
-
-    def findTapAndInputStr(self, table_name, table_item_name, input_str, py_x=0, py_y=0):
-        """
-            找到并点击输入框，出现光标后输入字符串
-            :param table_name: 表名
-            :param table_item_name: 字段名
-            :param input_str: 输入的字符串
-            :param py_x: 偏移的x坐标值
-            :param py_y: 偏移的y坐标值
-            :return: 成功返回True，失败返回False
-        """
-        if self.findTap(table_name, table_item_name, py_x, py_y):
-            self.timer.sleep(2000)
-            self.phone.inputStrText(str(input_str))
-            if self.find("输入框", "输入窗口底部边框") or self.find("输入框", "游戏内底部输入框"):
-                self.phone.tapBack()
-            return True
-        return False
-
-    def findTapThenClearAndInputStr(self, table_name, table_item_name, input_str, py_x=0, py_y=0):
-        """
-            找到并点击输入框，出现光标后全选并清空输入框内容，再输入字符串
-            :param table_name: 表名
-            :param table_item_name: 字段名
-            :param input_str: 输入的字符串
-            :param py_x: 偏移的x坐标值
-            :param py_y: 偏移的y坐标值
-            :return: 成功返回True，失败返回False
-        """
-        if self.findTap(table_name, table_item_name, py_x, py_y):
-            self.timer.sleep(1500)
-            # 是否是弹出式输入框
-            input_mode_box = self.find("输入框", "输入窗口底部边框")
-            # 是否是游戏内底部输入框
-            input_mode_bottom = self.find("输入框", "游戏内底部输入框")
-            # 长按，弹出输入菜单
-            if input_mode_box:
-                self.toucher.longTouchSingle(25, 50, 1500)
-            elif input_mode_bottom:
-                pass
-            else:
-                self.findLongTouch(table_name, table_item_name, 1500, py_x, py_y)
-            self.timer.sleep(1000)
-
-            # ------ OldMethod Begin ------
-            # # 点击全选
-            # if self.findTap("输入框", "白色样式全选按钮") or self.findTap("输入框", "黑色样式全选按钮"):
-            #     self.timer.sleep(1000)
-            # # 清空字符串：点击剪切
-            # if self.findTap("输入框", "白色样式剪切按钮") or self.findTap("输入框", "黑色样式剪切按钮"):
-            #     self.timer.sleep(1000)
-            # ------ OldMethod Ending ------
-
-            # ------ NewMethod Begin ------
-            if input_mode_bottom:
-                for i in range(0, 20):
-                    self.phone.tapDel()
-            else:
-                # 点击全选
-                self.findTap("输入框", "白色样式全选按钮") or self.findTap("输入框", "黑色样式全选按钮")
-                # 清空字符串：全选后点击删除键
-                self.phone.tapDel()
-            # ------ NewMethod Ending ------
-
-            # 输入新的字符串
-            self.phone.inputStrText(str(input_str))
-            self.timer.sleep(1000)
-            # 弹出式输入框需要点击返回
-            if input_mode_box or input_mode_bottom:
-                self.phone.tapBack()
-                self.timer.sleep(1500)
             return True
         return False
 
